@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+</head>
+<body>
+    <h1>{{ page_title }}</h1>
+
+    <p>
+        <a href="{% url 'dishes:dish_list' %}">Назад до меню</a>
+    </p>
+
+    <form method="get">
+        <div>
+            <label for="q">Пошук:</label>
+            <input type="text" name="q" id="q" value="{{ current_filters.q }}">
+        </div>
+
+        <div>
+            <label for="cuisine">Кухня:</label>
+            <select name="cuisine" id="cuisine">
+                <option value="">Усі</option>
+                {% for cuisine in cuisines %}
+                    <option value="{{ cuisine.slug }}" {% if current_filters.cuisine == cuisine.slug %}selected{% endif %}>
+                        {{ cuisine.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="min_price">Ціна від:</label>
+            <input type="number" name="min_price" id="min_price" value="{{ current_filters.min_price }}">
+        </div>
+
+        <div>
+            <label for="max_price">Ціна до:</label>
+            <input type="number" name="max_price" id="max_price" value="{{ current_filters.max_price }}">
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="vegetarian" value="1" {% if current_filters.vegetarian == '1' %}checked{% endif %}>
+                Вегетаріанські
+            </label>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="available" value="1" {% if current_filters.available == '1' %}checked{% endif %}>
+                У наявності
+            </label>
+        </div>
+
+        <div>
+            <label for="spiciness">Гострота:</label>
+            <select name="spiciness" id="spiciness">
+                <option value="">Будь-яка</option>
+                <option value="0" {% if current_filters.spiciness == '0' %}selected{% endif %}>0</option>
+                <option value="1" {% if current_filters.spiciness == '1' %}selected{% endif %}>1</option>
+                <option value="2" {% if current_filters.spiciness == '2' %}selected{% endif %}>2</option>
+                <option value="3" {% if current_filters.spiciness == '3' %}selected{% endif %}>3</option>
+                <option value="4" {% if current_filters.spiciness == '4' %}selected{% endif %}>4</option>
+                <option value="5" {% if current_filters.spiciness == '5' %}selected{% endif %}>5</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="sort">Сортування:</label>
+            <select name="sort" id="sort">
+                <option value="">За замовчуванням</option>
+                <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Ціна ↑</option>
+                <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Ціна ↓</option>
+                <option value="name_asc" {% if current_filters.sort == 'name_asc' %}selected{% endif %}>Назва А-Я</option>
+                <option value="name_desc" {% if current_filters.sort == 'name_desc' %}selected{% endif %}>Назва Я-А</option>
+                <option value="popular" {% if current_filters.sort == 'popular' %}selected{% endif %}>Популярні</option>
+                <option value="new" {% if current_filters.sort == 'new' %}selected{% endif %}>Нові</option>
+            </select>
+        </div>
+
+        <button type="submit">Застосувати</button>
+    </form>
+
+    <hr>
+
+    {% for dish in dishes %}
+        <div>
+            <h3>
+                <a href="{% url 'dishes:dish_detail' dish.slug %}">{{ dish.name }}</a>
+            </h3>
+            <p>{{ dish.description|truncatewords:20 }}</p>
+            <p>Ціна: {{ dish.price }}</p>
+
+            {% if dish.cuisine %}
+                <p>Кухня: {{ dish.cuisine.name }}</p>
+            {% endif %}
+        </div>
+        <hr>
+    {% empty %}
+        <p>У цій категорії страв не знайдено.</p>
+    {% endfor %}
+</body>
+</html>
