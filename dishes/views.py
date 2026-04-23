@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Dish, Category, Cuisine
+from menu.models import Dish, Category, Cuisine
 
 
 def apply_filters_and_sorting(request, queryset):

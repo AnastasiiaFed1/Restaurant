@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('menu.urls'))
+    path('', include('dishes.urls'))
 ]
 
 # Додаємо обслуговування медіа-файлів під час розробки
