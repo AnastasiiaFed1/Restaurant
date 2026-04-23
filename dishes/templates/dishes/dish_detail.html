@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+</head>
+<body>
+    <p>
+        <a href="{% url 'dishes:dish_list' %}">Назад до меню</a>
+    </p>
+
+    <h1>{{ dish.name }}</h1>
+
+    {% if dish.photo %}
+        <img src="{{ dish.photo.url }}" alt="{{ dish.name }}" width="300">
+    {% endif %}
+
+    <p><strong>Опис:</strong> {{ dish.description }}</p>
+    <p><strong>Ціна:</strong> {{ dish.price }}</p>
+    <p><strong>Категорія:</strong> {{ dish.category.name }}</p>
+
+    {% if dish.cuisine %}
+        <p><strong>Кухня:</strong> {{ dish.cuisine.name }}</p>
+    {% endif %}
+
+    <p><strong>Гострота:</strong> {{ dish.spiciness }}</p>
+
+    {% if dish.weight %}
+        <p><strong>Вага:</strong> {{ dish.weight }}</p>
+    {% endif %}
+
+    {% if dish.calories %}
+        <p><strong>Калорійність:</strong> {{ dish.calories }}</p>
+    {% endif %}
+
+    {% if dish.is_vegetarian %}
+        <p>Вегетаріанська страва</p>
+    {% endif %}
+
+    {% if dish.is_available %}
+        <p>Є в наявності</p>
+    {% else %}
+        <p>Немає в наявності</p>
+    {% endif %}
+</body>
+</html>
