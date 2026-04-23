@@ -1,69 +1,57 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ page_title }}</title>
-</head>
-<body>
-    <h1>{{ page_title }}</h1>
+{% extends 'base.html' %}
 
-    <form method="get">
-        <div>
-            <label for="q">Пошук:</label>
-            <input type="text" name="q" id="q" value="{{ current_filters.q }}">
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="fw-bold">{{ page_title }}</h1>
+    <p class="page-subtitle">Обирайте страви за категоріями, кухнею та ціною</p>
+</div>
+
+<form method="get" class="card p-4 shadow-sm mb-4">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label for="q" class="form-label">Пошук</label>
+            <input type="text" name="q" id="q" value="{{ current_filters.q }}" class="form-control">
         </div>
 
-        <div>
-            <label for="category">Категорія:</label>
-            <select name="category" id="category">
+        <div class="col-md-4">
+            <label for="category" class="form-label">Категорія</label>
+            <select name="category" id="category" class="form-select">
                 <option value="">Усі</option>
                 {% for category in categories %}
-                    <option value="{{ category.slug }}" {% if current_filters.category == category.slug %}selected{% endif %}>
+                    <option value="{{ category.id }}" {% if current_filters.category == category.id|stringformat:"s" %}selected{% endif %}>
                         {{ category.name }}
                     </option>
                 {% endfor %}
             </select>
         </div>
 
-        <div>
-            <label for="cuisine">Кухня:</label>
-            <select name="cuisine" id="cuisine">
+        <div class="col-md-4">
+            <label for="cuisine" class="form-label">Кухня</label>
+            <select name="cuisine" id="cuisine" class="form-select">
                 <option value="">Усі</option>
                 {% for cuisine in cuisines %}
-                    <option value="{{ cuisine.slug }}" {% if current_filters.cuisine == cuisine.slug %}selected{% endif %}>
+                    <option value="{{ cuisine.id }}" {% if current_filters.cuisine == cuisine.id|stringformat:"s" %}selected{% endif %}>
                         {{ cuisine.name }}
                     </option>
                 {% endfor %}
             </select>
         </div>
 
-        <div>
-            <label for="min_price">Ціна від:</label>
-            <input type="number" name="min_price" id="min_price" value="{{ current_filters.min_price }}">
+        <div class="col-md-3">
+            <label for="min_price" class="form-label">Ціна від</label>
+            <input type="number" name="min_price" id="min_price" value="{{ current_filters.min_price }}" class="form-control">
         </div>
 
-        <div>
-            <label for="max_price">Ціна до:</label>
-            <input type="number" name="max_price" id="max_price" value="{{ current_filters.max_price }}">
+        <div class="col-md-3">
+            <label for="max_price" class="form-label">Ціна до</label>
+            <input type="number" name="max_price" id="max_price" value="{{ current_filters.max_price }}" class="form-control">
         </div>
 
-        <div>
-            <label>
-                <input type="checkbox" name="vegetarian" value="1" {% if current_filters.vegetarian == '1' %}checked{% endif %}>
-                Вегетаріанські
-            </label>
-        </div>
-
-        <div>
-            <label>
-                <input type="checkbox" name="available" value="1" {% if current_filters.available == '1' %}checked{% endif %}>
-                У наявності
-            </label>
-        </div>
-
-        <div>
-            <label for="spiciness">Гострота:</label>
-            <select name="spiciness" id="spiciness">
+        <div class="col-md-3">
+            <label for="spiciness" class="form-label">Гострота</label>
+            <select name="spiciness" id="spiciness" class="form-select">
                 <option value="">Будь-яка</option>
                 <option value="0" {% if current_filters.spiciness == '0' %}selected{% endif %}>0</option>
                 <option value="1" {% if current_filters.spiciness == '1' %}selected{% endif %}>1</option>
@@ -74,9 +62,9 @@
             </select>
         </div>
 
-        <div>
-            <label for="sort">Сортування:</label>
-            <select name="sort" id="sort">
+        <div class="col-md-3">
+            <label for="sort" class="form-label">Сортування</label>
+            <select name="sort" id="sort" class="form-select">
                 <option value="">За замовчуванням</option>
                 <option value="price_asc" {% if current_filters.sort == 'price_asc' %}selected{% endif %}>Ціна ↑</option>
                 <option value="price_desc" {% if current_filters.sort == 'price_desc' %}selected{% endif %}>Ціна ↓</option>
@@ -87,37 +75,71 @@
             </select>
         </div>
 
-        <button type="submit">Застосувати</button>
-    </form>
-
-    <hr>
-
-    {% for dish in dishes %}
-        <div>
-            <h3>
-                <a href="{% url 'dishes:dish_detail' dish.slug %}">{{ dish.name }}</a>
-            </h3>
-            <p>{{ dish.description|truncatewords:20 }}</p>
-            <p>Ціна: {{ dish.price }}</p>
-            <p>Категорія: {{ dish.category.name }}</p>
-
-            {% if dish.cuisine %}
-                <p>Кухня: {{ dish.cuisine.name }}</p>
-            {% endif %}
-
-            {% if dish.is_vegetarian %}
-                <p>Вегетаріанська страва</p>
-            {% endif %}
-
-            {% if dish.is_available %}
-                <p>Є в наявності</p>
-            {% else %}
-                <p>Немає в наявності</p>
-            {% endif %}
+        <div class="col-md-3 d-flex align-items-end">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="available" value="1" id="available"
+                       {% if current_filters.available == '1' %}checked{% endif %}>
+                <label class="form-check-label" for="available">
+                    У наявності
+                </label>
+            </div>
         </div>
-        <hr>
-    {% empty %}
-        <p>Страв не знайдено.</p>
-    {% endfor %}
-</body>
-</html>
+
+        <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-dark">Застосувати</button>
+            <a href="{% url 'dishes:dish_list' %}" class="btn btn-outline-secondary">Скинути</a>
+        </div>
+    </div>
+</form>
+
+{% if dishes %}
+    <div class="row">
+        {% for dish in dishes %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if dish.image %}
+                        <img src="{{ dish.image.url }}" class="card-img-top" style="height: 220px; object-fit: cover;" alt="{{ dish.name }}">
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{% url 'dishes:dish_detail' dish.id %}" class="text-dark text-decoration-none">
+                                {{ dish.name }}
+                            </a>
+                        </h5>
+
+                        <p class="text-muted">
+                            {{ dish.description|truncatewords:15 }}
+                        </p>
+
+                        <p><strong>{{ dish.price }} грн</strong></p>
+
+                        <p class="small text-muted">
+                            {{ dish.category.name }}
+                            {% if dish.cuisine %}
+                                • {{ dish.cuisine.name }}
+                            {% endif %}
+                        </p>
+
+                        <div class="mb-2">
+                            {% if dish.is_available %}
+                                <span class="badge-available">Є в наявності</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Немає</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="mt-auto">
+                            <a href="{% url 'dishes:dish_detail' dish.id %}" class="btn btn-dark w-100">
+                                Детальніше
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">Страв не знайдено.</p>
+{% endif %}
+{% endblock %}

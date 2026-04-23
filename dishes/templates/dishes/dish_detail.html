@@ -1,46 +1,49 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ page_title }}</title>
-</head>
-<body>
-    <p>
-        <a href="{% url 'dishes:dish_list' %}">Назад до меню</a>
-    </p>
+{% extends 'base.html' %}
 
-    <h1>{{ dish.name }}</h1>
+{% block content %}
 
-    {% if dish.photo %}
-        <img src="{{ dish.photo.url }}" alt="{{ dish.name }}" width="300">
-    {% endif %}
+<div class="mb-3">
+    <a href="{% url 'dishes:dish_list' %}" class="btn btn-outline-secondary">
+        ← Назад до меню
+    </a>
+</div>
 
-    <p><strong>Опис:</strong> {{ dish.description }}</p>
-    <p><strong>Ціна:</strong> {{ dish.price }}</p>
-    <p><strong>Категорія:</strong> {{ dish.category.name }}</p>
+<div class="card shadow-sm p-4">
+    <div class="row">
 
-    {% if dish.cuisine %}
-        <p><strong>Кухня:</strong> {{ dish.cuisine.name }}</p>
-    {% endif %}
+        <!-- Фото -->
+        <div class="col-md-5">
+            {% if dish.image %}
+                <img src="{{ dish.image.url }}" class="img-fluid rounded" alt="{{ dish.name }}">
+            {% endif %}
+        </div>
 
-    <p><strong>Гострота:</strong> {{ dish.spiciness }}</p>
+        <!-- Інформація -->
+        <div class="col-md-7">
+            <h2>{{ dish.name }}</h2>
 
-    {% if dish.weight %}
-        <p><strong>Вага:</strong> {{ dish.weight }}</p>
-    {% endif %}
+            <p class="text-muted">{{ dish.description }}</p>
 
-    {% if dish.calories %}
-        <p><strong>Калорійність:</strong> {{ dish.calories }}</p>
-    {% endif %}
+            <h4 class="fw-bold">{{ dish.price }} грн</h4>
 
-    {% if dish.is_vegetarian %}
-        <p>Вегетаріанська страва</p>
-    {% endif %}
+            <p><strong>Категорія:</strong> {{ dish.category.name }}</p>
 
-    {% if dish.is_available %}
-        <p>Є в наявності</p>
-    {% else %}
-        <p>Немає в наявності</p>
-    {% endif %}
-</body>
-</html>
+            {% if dish.cuisine %}
+                <p><strong>Кухня:</strong> {{ dish.cuisine.name }}</p>
+            {% endif %}
+
+            <p><strong>Гострота:</strong> {{ dish.spiciness }}</p>
+            <p><strong>Вага:</strong> {{ dish.weight }} г</p>
+            <p><strong>Калорійність:</strong> {{ dish.calories }} ккал</p>
+
+            {% if dish.is_available %}
+                <span class="badge bg-success">Є в наявності</span>
+            {% else %}
+                <span class="badge bg-secondary">Немає</span>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
