@@ -34,5 +34,4 @@ jobs:
       - name: Stop Docker container
         if: always()
         run: |
-          docker stop restaurant-container
-          docker rm restaurant-container
+          docker rm -f restaurant-container || true
