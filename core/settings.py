@@ -28,7 +28,11 @@ SECRET_KEY = 'django-insecure-lcs%9q9(c7fmidq#_od@63&xo1nacsa)lstkdv3bllwev(6ke@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'bella-cucina-app-a1f6e6c9f866.herokuapp.com',
+]
 
 
 # Application definition
@@ -125,3 +129,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://bella-cucina-app-a1f6e6c9f866.herokuapp.com',
+]
